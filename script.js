@@ -12,45 +12,48 @@ function getComputerchoice(){
         return "scissors";
     }
 }
-function getHumanchoice(){
-    let ch=prompt("Choose Rock , Paper or Scissors");
-    //Assuming valid input as said in the directions
-    return ch;
-}
+const result=document.querySelector("#results");
+const roundResult=document.createElement("p");
+const score=document.createElement("p");
+const winner=document.createElement("h3");
+
+result.appendChild(roundResult);
+result.appendChild(score);
+result.appendChild(winner);
 
 let humanScore=0;
 let computerScore=0;
 
 function playRound(humanChoice, computerChoice) {
-    humanChoice=humanChoice.toLowerCase();
-    if(humanChoice===computerChoice){
-        console.log("Draw");
+    if (humanScore >= 5 || computerScore >= 5) {
+    return;
     }
-    else if(humanChoice==="rock"&&computerChoice==="scissors" || humanChoice==="paper"&&computerChoice==="rock" || humanChoice==="Scissors"&&computerChoice==="paper"){
-        console.log("You won ! "+humanChoice+" beats "+computerChoice);
+    if(humanChoice===computerChoice){
+        roundResult.textContent="Draw";
+    }
+    else if(humanChoice==="rock"&&computerChoice==="scissors" || humanChoice==="paper"&&computerChoice==="rock" || humanChoice==="scissors"&&computerChoice==="paper"){
+        roundResult.textContent="You won ! "+humanChoice+" beats "+computerChoice;
         humanScore+=1;
     }
     else{
-        console.log("You lost. " +computerChoice+" beats "+humanChoice);
+        roundResult.textContent="You lost. " +computerChoice+" beats "+humanChoice;
         computerScore+=1;
     }
-}
 
-function playGame(){
-    for(let i=0;i<5;i++){
-        const humanSelection = getHumanchoice();
-        const computerSelection = getComputerchoice();
-        playRound(humanSelection, computerSelection);
-    }
+    score.textContent="Player: "+humanScore+" | Computer: "+computerScore;
 
-    if (humanScore>computerScore){
-        console.log("You won the game !");
+    if(humanScore===5){
+        winner.textContent="You won the game !";
     }
-    else if(computerScore>humanScore){
-        console.log("You lost. The computer won the game");
-    }
-    else{
-        console.log("The game ended in a draw.");
+    if(computerScore===5){
+        winner.textContent="The Computer won the game";
     }
 }
-playGame();
+const buttons=document.querySelectorAll("button");
+
+buttons.forEach((btn)=>{
+    btn.addEventListener("click", ()=>{
+        playRound(btn.id,getComputerchoice());
+    });
+});
+
